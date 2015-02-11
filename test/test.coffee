@@ -1,9 +1,11 @@
 assert = require("assert")
 rest = require('restler')
 app = require('../app')
-app.listen '3000'
 
 describe "isomo", ->
+  before (done)->
+    app.listen '3000',->
+      done()
   it "server exist",(done)->
     rest.get 'http://localhost:3000/bot/greet'
     .on 'success',->
@@ -11,6 +13,10 @@ describe "isomo", ->
   it "bot say Hello", (done)->
     rest.get 'http://localhost:3000/bot/greet'
     .on 'success',(data)->
-      console.log data
       assert.equal data,"Hello"
+      done()
+  it "you say YES!!",(done)->
+    rest.get 'http://localhost:3000/bot/say?YES'
+    .on 'success',(data)->
+      assert.equal data,"Say YES!"
       done()
